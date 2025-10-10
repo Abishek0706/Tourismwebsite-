@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Tamil Nadu - AI-Powered Tourism Guide</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="modern-header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <h2><i class="fas fa-map-marked-alt"></i> Discover Tamil Nadu</h2>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#places">Places</a></li>
+                    <li><a href="#ai-search">AI Guide</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="hero-content" id="home">
+            <h1 class="hero-title">Experience the Magic of Tamil Nadu</h1>
+            <p class="hero-subtitle">Discover ancient temples, pristine beaches, and hill stations with our AI-powered travel guide</p>
+            <button class="cta-btn" onclick="scrollToSection('ai-search')">
+                <i class="fas fa-robot"></i> Ask AI Guide
+            </button>
+        </div>
+    </header>
+
+    <!-- AI-Powered Search Section -->
+    <section class="ai-search-section" id="ai-search">
+        <div class="container">
+            <h2><i class="fas fa-brain"></i> AI Travel Assistant</h2>
+            <p>Ask our AI about any place in Tamil Nadu - get instant recommendations!</p>
+            
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" 
+                           id="aiSearchInput" 
+                           placeholder="Ask about Chennai, Ooty, Madurai, or any Tamil Nadu destination..."
+                           onkeypress="handleEnterKey(event)">
+                    <button id="searchBtn" onclick="searchWithAI()">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+                
+                <div class="quick-suggestions">
+                    <span>Try asking:</span>
+                    <button class="suggestion-btn" onclick="askAI('Best temples in Chennai')">Best temples in Chennai</button>
+                    <button class="suggestion-btn" onclick="askAI('Hill stations in Tamil Nadu')">Hill stations in Tamil Nadu</button>
+                    <button class="suggestion-btn" onclick="askAI('Beach destinations in Tamil Nadu')">Beach destinations</button>
+                    <button class="suggestion-btn" onclick="askAI('Food to try in Madurai')">Food in Madurai</button>
+                </div>
+            </div>
+
+            <div id="aiResponse" class="ai-response hidden">
+                <div class="response-header">
+                    <h3><i class="fas fa-robot"></i> AI Guide Says:</h3>
+                    <button class="close-btn" onclick="closeAIResponse()">×</button>
+                </div>
+                <div id="responseContent" class="response-content">
+                    <!-- AI response will appear here -->
+                </div>
+                <div class="loading" id="loadingSpinner">
+                    <i class="fas fa-spinner fa-spin"></i> Getting information for you...
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Places Section -->
+    <section class="places-section" id="places">
+        <div class="container">
+            <h2>Popular Destinations in Tamil Nadu</h2>
+            <div class="places-grid">
+                <div class="place-card" data-place="chennai">
+                    <img src="https://images.unsplash.com/photo-1582510003544-4d00b7f74220" alt="Chennai Marina Beach">
+                    <div class="card-content">
+                        <h3>Chennai</h3>
+                        <p>Capital city with Marina Beach, temples, and rich cultural heritage.</p>
+                        <button class="explore-btn" onclick="askAI('Tell me about Chennai tourist places')">
+                            <i class="fas fa-robot"></i> Ask AI
+                        </button>
+                    </div>
+                </div>
+
+                <div class="place-card" data-place="ooty">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4" alt="Ooty Hill Station">
+                    <div class="card-content">
+                        <h3>Ooty</h3>
+                        <p>Queen of hill stations with tea gardens and pleasant weather.</p>
+                        <button class="explore-btn" onclick="askAI('Best places to visit in Ooty')">
+                            <i class="fas fa-robot"></i> Ask AI
+                        </button>
+                    </div>
+                </div>
+
+                <div class="place-card" data-place="madurai">
+                    <img src="https://images.unsplash.com/photo-1609920658906-8223bd289001" alt="Madurai Temple">
+                    <div class="card-content">
+                        <h3>Madurai</h3>
+                        <p>Ancient city famous for Meenakshi Temple and rich history.</p>
+                        <button class="explore-btn" onclick="askAI('What to see in Madurai')">
+                            <i class="fas fa-robot"></i> Ask AI
+                        </button>
+                    </div>
+                </div>
+
+                <div class="place-card" data-place="kanyakumari">
+                    <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96" alt="Kanyakumari">
+                    <div class="card-content">
+                        <h3>Kanyakumari</h3>
+                        <p>Southernmost tip where three seas meet - witness stunning sunrises.</p>
+                        <button class="explore-btn" onclick="askAI('Kanyakumari attractions and sunset points')">
+                            <i class="fas fa-robot"></i> Ask AI
+                        </button>
+                    </div>
+                </div>
+
+                <div class="place-card" data-place="kodaikanal">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4" alt="Kodaikanal">
+                    <div class="card-content">
+                        <h3>Kodaikanal</h3>
+                        <p>Princess of hill stations with lakes and scenic valleys.</p>
+                        <button class="explore-btn" onclick="askAI('Kodaikanal tourist spots and activities')">
+                            <i class="fas fa-robot"></i> Ask AI
+                        </button>
+                    </div>
+                </div>
+
+                <div class="place-card" data-place="rameswaram">
+                    <img src="https://images.unsplash.com/photo-1541692641319-981cc79ee10e" alt="Rameswaram">
+                    <div class="card-content">
+                        <h3>Rameswaram</h3>
+                        <p>Sacred island with beautiful temples and pristine beaches.</p>
+                        <button class="explore-btn" onclick="askAI('Rameswaram pilgrimage sites and beaches')">
+                            <i class="fas fa-robot"></i> Ask AI
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <h2>Plan Your Tamil Nadu Journey</h2>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h3>Get in Touch</h3>
+                    <p><i class="fas fa-envelope"></i> travel@tamilnadutour.com</p>
+                    <p><i class="fas fa-phone"></i> +91 98765 43210</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Chennai, Tamil Nadu</p>
+                </div>
+                <div class="quick-facts">
+                    <h3>Quick Facts</h3>
+                    <p><i class="fas fa-language"></i> Languages: Tamil, English</p>
+                    <p><i class="fas fa-calendar"></i> Best Time: Oct - Mar</p>
+                    <p><i class="fas fa-thermometer-half"></i> Climate: Tropical</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="modern-footer">
+        <div class="container">
+            <p>&copy; 2025 Discover Tamil Nadu | AI-Powered Tourism Guide</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
