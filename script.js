@@ -1,12 +1,9 @@
-// Configuration - Replace with your OpenRouter API key
-const OPENROUTER_CONFIG = {
-    apiKey: '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', // Replace with your actual API key
-    baseURL: 'https://openrouter.ai/api/v1',
-    model: 'deepseek/deepseek-r1-distill-llama-70b:free', // Fast and cost-effective model
+// Configuration - DigitalOcean Agent Endpoint
+const DIGITALOCEAN_CONFIG = {
+    apiKey: 'GrzZxYmMor8o8wZrriOu08Z6m2FNYUIB', // Your DigitalOcean API key
+    baseURL: 'https://tnex2qzcq6rfq7r4d5gfmxkr.agents.do-ai.run/api/v1',
     headers: {
-        'Content-Type': 'application/json',
-        'HTTP-Referer': window.location.origin,
-        'X-Title': 'Tamil Nadu Tourism AI Guide'
+        'Content-Type': 'application/json'
     }
 };
 
@@ -65,10 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initializeApp() {
-    // Check if API key is configured
-    if (OPENROUTER_CONFIG.apiKey === 'YOUR_OPENROUTER_API_KEY_HERE') {
-        console.warn('⚠️ Please configure your OpenRouter API key in the OPENROUTER_CONFIG object');
-    }
+    console.log('✅ Tamil Nadu Tourism AI Website loaded with DigitalOcean Agent!');
     
     // Initialize mobile navigation
     initializeMobileNav();
@@ -144,51 +138,48 @@ async function searchWithAI() {
 }
 
 async function askAI(query) {
+    // Show loading state
+    showAIResponse();
+    showLoading(true);
+    animateSearchButton(true);
+    
     try {
-        // Show loading state
-        showAIResponse();
-        showLoading(true);
-        
         // Update search input if called from suggestion buttons
         if (searchInput) {
             searchInput.value = query;
         }
         
-        // Check API key configuration
-        if (OPENROUTER_CONFIG.apiKey === 'YOUR_OPENROUTER_API_KEY_HERE') {
-            showError('⚠️ Please configure your OpenRouter API key to use the AI feature. Check the console for instructions.');
-            return;
-        }
-        
         // Create enhanced prompt with Tamil Nadu context
         const enhancedPrompt = createEnhancedPrompt(query);
         
-        // Make API request to OpenRouter
-        const response = await fetch(`${OPENROUTER_CONFIG.baseURL}/chat/completions`, {
+        // Make API request to DigitalOcean Agent
+        const response = await fetch(`${DIGITALOCEAN_CONFIG.baseURL}/chat/completions`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${OPENROUTER_CONFIG.apiKey}`,
-                ...OPENROUTER_CONFIG.headers
+                'Authorization': `Bearer ${DIGITALOCEAN_CONFIG.apiKey}`,
+                ...DIGITALOCEAN_CONFIG.headers
             },
             body: JSON.stringify({
-                model: OPENROUTER_CONFIG.model,
                 messages: [
                     {
                         role: 'system',
-                        content: `You are an expert Tamil Nadu tourism guide. Provide helpful, accurate, and engaging information about Tamil Nadu destinations, culture, food, and travel tips. Format your response with clear headings and bullet points where appropriate. Always be enthusiastic and helpful.`
+                        content: 'You are an expert Tamil Nadu tourism guide. Provide helpful, accurate, and engaging information about Tamil Nadu destinations, culture, food, and travel tips. Format your response with clear headings and bullet points where appropriate. Always be enthusiastic and helpful.'
                     },
                     {
                         role: 'user',
                         content: enhancedPrompt
                     }
                 ],
-                temperature: 0.7,
-                max_tokens: 1000
+                stream: false,
+                include_functions_info: false,
+                include_retrieval_info: false,
+                include_guardrails_info: false
             })
         });
         
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(`API Error (${response.status}): ${errorData.error?.message || response.statusText}`);
         }
         
         const data = await response.json();
@@ -202,6 +193,7 @@ async function askAI(query) {
         showError(`Sorry, there was an error getting information. Please try again later. Error: ${error.message}`);
     } finally {
         showLoading(false);
+        animateSearchButton(false);
     }
 }
 
@@ -292,19 +284,6 @@ function scrollToSection(sectionId) {
     }
 }
 
-// Additional utility functions
-function getRandomSuggestion() {
-    const suggestions = [
-        "Best time to visit Ooty",
-        "Food specialties of Madurai",
-        "Temples to visit in Kanchipuram",
-        "Beach resorts in Mahabalipuram",
-        "Hill stations near Chennai",
-        "Heritage sites in Tamil Nadu"
-    ];
-    return suggestions[Math.floor(Math.random() * suggestions.length)];
-}
-
 // Add loading animation to search button
 function animateSearchButton(loading) {
     if (searchBtn) {
@@ -318,39 +297,26 @@ function animateSearchButton(loading) {
     }
 }
 
-// Update the askAI function to use button animation
-const originalAskAI = askAI;
-askAI = async function(query) {
-    animateSearchButton(true);
-    try {
-        await originalAskAI(query);
-    } finally {
-        animateSearchButton(false);
-    }
-};
-
-// Add some sample quick questions that users can click
-function addQuickQuestions() {
-    const quickQuestions = [
-        "What are the must-visit temples in Chennai?",
-        "Best hill stations in Tamil Nadu for families?",
-        "Traditional Tamil Nadu food to try",
-        "Beach destinations near Chennai",
-        "Historical places in Madurai"
+// Additional utility functions
+function getRandomSuggestion() {
+    const suggestions = [
+        "Best time to visit Ooty",
+        "Food specialties of Madurai",
+        "Temples to visit in Kanchipuram",
+        "Beach resorts in Mahabalipuram",
+        "Hill stations near Chennai",
+        "Heritage sites in Tamil Nadu"
     ];
-    
-    // You can use these to populate suggestion buttons or create a FAQ section
-    return quickQuestions;
+    return suggestions[Math.floor(Math.random() * suggestions.length)];
 }
 
 // Console instructions for users
 console.log(`
-🎉 Tamil Nadu Tourism AI Website Loaded Successfully!
+🎉 Tamil Nadu Tourism AI Website - Powered by DigitalOcean!
 
-📝 To activate AI features:
-1. Get your OpenRouter API key from: https://openrouter.ai/keys
-2. Replace 'YOUR_OPENROUTER_API_KEY_HERE' in the OPENROUTER_CONFIG object
-3. The AI will then be able to answer questions about Tamil Nadu tourism!
+✅ Your DigitalOcean Agent is configured and ready!
+🔗 Endpoint: https://tnex2qzcq6rfq7r4d5gfmxkr.agents.do-ai.run
+📚 API Docs: /api/v1/chat/completions
 
 💡 Example questions you can ask:
 - "What are the best places to visit in Chennai?"
